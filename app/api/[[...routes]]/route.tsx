@@ -103,6 +103,8 @@ const IconBox = ({
     borderWidth={isMain ? "3" : "0"}
     borderColor="white"
   >
+ 
+ 
     <Image
       src={src}
       width={isMain ? "80" : "56"}
