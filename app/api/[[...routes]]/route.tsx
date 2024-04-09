@@ -32,7 +32,7 @@ const app = new Frog({
   basePath: "/api",
   ui: { vars },
   imageAspectRatio: "1:1",
-  imageOptions: { width: 1200, height: 1200 },
+  imageOptions: { width: 1000, height: 1000 },
 
   // hub: neynar({ apiKey: 'NEYNAR_FROG_FM' })
 });
@@ -58,20 +58,20 @@ const guides = [
   },
 
   {
-    icon1: { src: "/discover.png", text: "F.Clients" },
+    icon1: { src: "/app.png", text: "F.Clients" },
     icon2: { src: "/shared.png", text: "G.Frames" },
-    icon3: { src: "/shared.png", text: "H.Actions" },
-    icon4: { src: "/shared.png", text: "I.Tipping" },
-    icon5: { src: "/discover.png", text: "J.Bounties" },
+    icon3: { src: "/actions.png", text: "H.Actions" },
+    icon4: { src: "/tips.png", text: "I.Tipping" },
+    icon5: { src: "/bounty.png", text: "J.Bounties" },
     title: "Enhancing Your Experience: Intermediate Concepts",
   },
 
   {
-    icon1: { src: "/discover.png", text: "K.Architecture" },
-    icon2: { src: "/shared.png", text: "L.Hubs" },
-    icon3: { src: "/shared.png", text: "M.Contracts" },
-    icon4: { src: "/shared.png", text: "N.Govs." },
-    icon5: { src: "/discover.png", text: "O.Contributions" },
+    icon1: { src: "/arc.png", text: "K.Architecture" },
+    icon2: { src: "/hubs.png", text: "L.Hubs" },
+    icon3: { src: "/contract.png", text: "M.Contracts" },
+    icon4: { src: "/gov.png", text: "N.Govs." },
+    icon5: { src: "/cont.png", text: "O.Contributions" },
     title: "Advanced Topics in Decentralized Social Media",
   },
 
@@ -105,8 +105,8 @@ const IconBox = ({
   >
     <Image
       src={src}
-      width={isMain ? "80" : "56"}
-      height={isMain ? "80" : "56"}
+      width={isMain ? "80" : "64"}
+      height={isMain ? "80" : "64"}
       borderRadius="3"
     />
     <Box
@@ -187,7 +187,7 @@ app.frame("/", (c) => {
             ))}
           </Box>
         </Row>
-        <div tw="flex items-center absolute bottom-0 w-full h-16  px-8 justify-between border-2 border-white">
+        <div tw="flex items-center absolute bottom-0 w-full h-16  px-8 justify-between border-t-2  border-white">
           <div tw="flex items-center   ">
             <Text color="red" size="24" weight="700" font="VT323">
               NON CRYPTO STUFF/
@@ -219,7 +219,6 @@ app.frame("/", (c) => {
 });
 
 app.frame("/guide", (c) => {
- 
   return c.res({
     action: "/guide/details",
     image: (
@@ -236,8 +235,8 @@ app.frame("/guide", (c) => {
           alignVertical="center"
           alignHorizontal="center"
           gap="10"
-          paddingLeft="24"
-          paddingRight="24"
+          paddingLeft="12"
+          paddingRight="12"
         >
           <Image src="/fc2.png" width="32" height="32" />
 
@@ -259,7 +258,7 @@ app.frame("/guide", (c) => {
           gap="24"
           padding="6"
         >
-          <div tw="flex items-center border-b pb-2 border-gray-200 ">
+          <div tw="flex items-center border-b pb-2 border-gray-200 pt-2 ">
             <Text color="white" font="VT323" size="24">
               You read 4 out of 12 guides.
             </Text>
@@ -314,7 +313,7 @@ app.frame("/guide", (c) => {
             </Box>
           ))}
         </Row>
-        <div tw="flex items-center absolute bottom-0 w-full h-16  px-8 justify-between border-2 border-white">
+        <div tw="flex items-center absolute bottom-0 w-full h-16  px-8 justify-between border-t-2  border-white">
           <div tw="flex items-center   ">
             <Text color="red" size="24" weight="700" font="VT323">
               NON CRYPTO STUFF/
@@ -336,7 +335,7 @@ app.frame("/guide", (c) => {
       </Box>
     ),
     intents: [
-      <TextInput placeholder="Write topic letter. " />,
+      <TextInput placeholder="Write int letter ex:a for Intro " />,
       <Button action="/"> 🗂️ Main Menu</Button>,
       <Button value="submit"> ✅ Go Topic</Button>,
     ],
@@ -345,8 +344,9 @@ app.frame("/guide", (c) => {
 });
 
 app.frame("/guide/details", (c) => {
+ 
   const { inputText } = c;
-  const section = Sections.find((sec) => sec.value === inputText);
+  const section = Sections.find((sec) => sec.value.toLowerCase() === inputText.toLowerCase());
 
   return c.res({
     image: (
