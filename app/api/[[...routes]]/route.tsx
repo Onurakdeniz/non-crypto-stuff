@@ -103,8 +103,6 @@ const IconBox = ({
     borderWidth={isMain ? "3" : "0"}
     borderColor="white"
   >
- 
- 
     <Image
       src={src}
       width={isMain ? "80" : "56"}
@@ -221,9 +219,7 @@ app.frame("/", (c) => {
 });
 
 app.frame("/guide", (c) => {
-  const { inputText } = c;
-  const title = inputText;
-  console.log(inputText);
+ 
   return c.res({
     action: "/guide/details",
     image: (
