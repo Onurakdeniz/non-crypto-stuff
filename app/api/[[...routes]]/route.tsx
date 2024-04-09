@@ -336,7 +336,7 @@ app.frame("/guide", (c) => {
       </Box>
     ),
     intents: [
-      <TextInput placeholder="Please write the letter of the topic and submit go topic. " />,
+      <TextInput placeholder="Write topic letter. " />,
       <Button action="/"> 🗂️ Main Menu</Button>,
       <Button value="submit"> ✅ Go Topic</Button>,
     ],
