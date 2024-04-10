@@ -22,11 +22,9 @@ export const {
     gray: "#a7a7a8",
     black: "black",
     bg: "#e8ed87",
-    fcPurple: "rgb(138, 99, 210)",
     backg: "linear-gradient(to bottom, #000000, #202020)",
-    yellow : "#ffe600",
+    yellow: "#ffe600",
     blue: "#0070f3",
-    green: "#00ff00",
     red: "#ff0000",
     orange: "#ffaa00",
   },
@@ -52,20 +50,20 @@ export const {
     ],
 
     press: [
-        {
-            name: "Press Start 2P",
-            source: "google",
-        },
-        ],
+      {
+        name: "Press Start 2P",
+        source: "google",
+      },
+    ],
 
     VT323: [
-        {
-            name: "VT323",
-            source: "google",
-        },
-        ],
+      {
+        name: "VT323",
+        source: "google",
+      },
+    ],
 
-         bungee: [
+    bungee: [
       {
         name: "Bungee",
         source: "google",

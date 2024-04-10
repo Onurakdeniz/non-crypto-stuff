@@ -1,5 +1,12 @@
 export const Title = "Welcome to non-crypto-stufaaaf";
 
+export const icons = [
+  { src: "/fc2.png", text: "User Guide" },
+  { src: "/secr.png", text: "Security" },
+  { src: "/discover.png", text: "Discover" },
+  { src: "/shared.png", text: "Share" },
+];
+
 export const Sections = [
   {
     text: "Inroduction",
@@ -107,6 +114,22 @@ export const Sections = [
         ],
         image: "",
       },
+    ],
+  },
+
+  {
+    text: "Reactions",
+    value: "e",
+    icon: "mouse-pointer-click",
+    content: [
+      {
+        title: " Cast Reactions in Farcaster",
+        paragraphs: [
+          "In Farcaster, a unique social media platform, interactions are centered around  casts   the posts that users share within the community. Here, engaging with content goes beyond simple viewing; users can express their appreciation or spread the word by liking or resharing these casts. This system of reactions breathes life into the platform, creating a vibrant space where support and interests are shared openly. Its this interplay of likes and shares that amplifies voices and content, knitting the community closer and making Farcaster a lively hub for social exchange.",
+        ],
+        image: "",
+      },
+      
     ],
   },
 
@@ -280,8 +303,6 @@ export const Sections = [
         ],
         image: "",
       },
-
-      
     ],
   },
 
@@ -294,15 +315,39 @@ export const Sections = [
         title: " Farcaster's Governance through Rough Consensus",
         paragraphs: [
           "Farcaster's evolution is a testament to the vibrant community of over 100 contributors who have played a pivotal role in shaping the protocol. Open to contributions of any scale, the platform extends an invitation to anyone interested in being part of its growth. Whether it’s by addressing open issues listed in the repositories, including the protocol specifications, canonical contracts, or the Hubble Hub development, or by participating in a developer call, there are numerous ways to contribute. Each repository, from the FName Registry to the comprehensive documentation site, serves as a gateway for community members to engage, share insights, and fortify Farcaster's infrastructure.",
-          "Central to Farcaster's collaborative ethos are the bi-weekly developer calls, an open forum designed to discuss protocol updates and future directions. These calls not only facilitate direct communication within the community but also offer a valuable opportunity for new contributors to get involved and voice their ideas. Additionally, the developer Telegram channel provides ongoing support, fostering a supportive environment for developers. With resources like detailed documentation and recordings of past calls readily available, Farcaster ensures that community members have the tools they need to contribute effectively, embodying the project's commitment to open-source development and decentralized innovation."
+          "Central to Farcaster's collaborative ethos are the bi-weekly developer calls, an open forum designed to discuss protocol updates and future directions. These calls not only facilitate direct communication within the community but also offer a valuable opportunity for new contributors to get involved and voice their ideas. Additionally, the developer Telegram channel provides ongoing support, fostering a supportive environment for developers. With resources like detailed documentation and recordings of past calls readily available, Farcaster ensures that community members have the tools they need to contribute effectively, embodying the project's commitment to open-source development and decentralized innovation.",
         ],
         image: "",
       },
-
-    
-
-      
     ],
   },
+];
 
+export const guides = [
+  {
+    icon1: { src: "/fc2.png", text: "A.Intro", value: "A" },
+    icon2: { src: "/users3.png", text: "B.Users", value: "B" },
+    icon3: { src: "/posts.png", text: "C.Casts", value: "C" },
+    icon4: { src: "/channels.png", text: "D.Channels", value: "D" },
+    icon5: { src: "/shared.png", text: "E.Reactions", value: "E" },
+    title: "The Essentials: What You Need to Know to Get Started",
+  },
+
+  {
+    icon1: { src: "/app.png", text: "F.Clients", value: "F" },
+    icon2: { src: "/shared.png", text: "G.Frames", value: "G" },
+    icon3: { src: "/actions.png", text: "H.Actions", value: "H" },
+    icon4: { src: "/tips.png", text: "I.Tipping", value: "I" },
+    icon5: { src: "/bounty.png", text: "J.Bounties", value: "J" },
+    title: "Enhancing Your Experience: Intermediate Concepts",
+  },
+
+  {
+    icon1: { src: "/arc.png", text: "K.Architecture", value: "K" },
+    icon2: { src: "/hubs.png", text: "L.Hubs", value: "L" },
+    icon3: { src: "/contract.png", text: "M.Contracts", value: "M" },
+    icon4: { src: "/gov.png", text: "N.Govs.", value: "N" },
+    icon5: { src: "/cont.png", text: "O.Contributions", value: "O" },
+    title: "Advanced Topics in Decentralized Social Media",
+  },
 ];

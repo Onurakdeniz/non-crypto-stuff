@@ -1,6 +1,7 @@
 /** @jsxImportSource frog/jsx */
 
 import { Button, Frog, TextInput } from "frog";
+import prisma from "@/app/lib/prisma";
 import {
   Box,
   Heading,
@@ -11,25 +12,34 @@ import {
   HStack,
   Image,
   Row,
-  Columns,
   Column,
   Icon,
   Spacer,
 } from "@/app/lib/ui";
 import { devtools } from "frog/dev";
 import { neynar } from "frog/middlewares";
-import { Title, Sections } from "@/app/constants";
-
+import { Title, Sections, icons, guides } from "@/app/constants";
+import {
+  upsertUserWithRelations,
+  markSectionAsRead,
+  getGuides,
+} from "@/app/lib/db";
 // import { neynar } from 'frog/hubs'
 import { handle } from "frog/next";
 import { serveStatic } from "frog/serve-static";
 import Head from "next/head";
+import { NeynarAPIClient } from "@neynar/nodejs-sdk";
 
 const NEYNAR_API_KEY = process.env.NEYNAR_API_KEY ?? "";
+
+const client = new NeynarAPIClient(NEYNAR_API_KEY);
+
+// Usage:
 
 const app = new Frog({
   assetsPath: "/",
   basePath: "/api",
+  verify: "silent",
   ui: { vars },
   imageAspectRatio: "1:1",
   imageOptions: { width: 1000, height: 1000 },
@@ -39,44 +49,6 @@ const app = new Frog({
 
 // Uncomment to use Edge Runtime
 // export const runtime = 'edge'
-
-const icons = [
-  { src: "/fc2.png", text: "User Guide" },
-  { src: "/secr.png", text: "Security" },
-  { src: "/discover.png", text: "Discover" },
-  { src: "/shared.png", text: "Share" },
-];
-
-const guides = [
-  {
-    icon1: { src: "/fc2.png", text: "A.Intro" },
-    icon2: { src: "/users3.png", text: "B.Users" },
-    icon3: { src: "/posts.png", text: "C.Casts" },
-    icon4: { src: "/channels.png", text: "D.Channels" },
-    icon5: { src: "/shared.png", text: "E.Share" },
-    title: "The Essentials: What You Need to Know to Get Started",
-  },
-
-  {
-    icon1: { src: "/app.png", text: "F.Clients" },
-    icon2: { src: "/shared.png", text: "G.Frames" },
-    icon3: { src: "/actions.png", text: "H.Actions" },
-    icon4: { src: "/tips.png", text: "I.Tipping" },
-    icon5: { src: "/bounty.png", text: "J.Bounties" },
-    title: "Enhancing Your Experience: Intermediate Concepts",
-  },
-
-  {
-    icon1: { src: "/arc.png", text: "K.Architecture" },
-    icon2: { src: "/hubs.png", text: "L.Hubs" },
-    icon3: { src: "/contract.png", text: "M.Contracts" },
-    icon4: { src: "/gov.png", text: "N.Govs." },
-    icon5: { src: "/cont.png", text: "O.Contributions" },
-    title: "Advanced Topics in Decentralized Social Media",
-  },
-
-  // ...other guides...
-];
 
 const IconBox = ({
   src,
@@ -157,32 +129,47 @@ app.frame("/", (c) => {
 
         <Divider color="white" />
 
-        <Row height="5/6" width="100%">
+        <Row 
+          height="5/6"
+          width="100%"
+          flexDirection="column"
+          justifyContent="center"
+          alignItems="center"
+          paddingBottom="38"
+        >
+
+          <Box 
+          allignItems="center"
+          alignVertical="center"
+          alignHorizontal="center"
+          padding="24"
+          >
+            <Text color="white" size="24" weight="700" font="VT323" align="center"
+            wrap="balance"
+            >
+              Welcome to Non Crypto Stuff! Dive into our collection of guides, tips, and tricks designed to enhance your journey with us. Unlock the full potential of your experience and discover how to make the most of every moment.
+            </Text>
+            </Box>
           <Box
             flexDirection="row"
             flexWrap="wrap"
             gap="24"
             padding="6"
             paddingTop="8"
-            backgroundColor="red"
             width="100%"
-            height="100%"
+            justifyContent="center"
+            alignItems="center"
           >
             {icons.map((icon, index) => (
-              <Column flexDirection="row" gap="24" backgroundColor="green">
-                <Column width="3/5" gap="12">
-                  <IconBox
-                    key={index}
-                    src={icon.src}
-                    text={icon.text}
-                    isMain={true}
-                  />
-                </Column>
-                <Column width="2/5" gap="4" backgroundColor="black">
-                  <Text color="white" size="24" weight="700" font="VT323">
-                    asdasdasdsd asd asdas dasdsad
-                  </Text>
-                </Column>
+              <Column key={index} flexDirection="column" gap="24" width="1/4">
+                <IconBox
+                  src={icon.src}
+                  text={icon.text}
+                  isMain={true}
+                />
+                <Text color="white" size="24" weight="700" font="VT323">
+                  {icon.description}
+                </Text>
               </Column>
             ))}
           </Box>
@@ -211,14 +198,147 @@ app.frame("/", (c) => {
 
     intents: [
       <Button action="/guide">📙 Guide</Button>,
-      <Button action="/start">🔒 Security</Button>,
-      <Button action="/start">🔍 Discover</Button>,
-      <Button action="/start">🔥 Share</Button>,
+      <Button action="/security">🔒 Security</Button>,
+      <Button action="/discover">🔍 Discover</Button>,
+      <Button.Link href="https://warpcast.com/~/compose?text=Non%20Crypto%20Stuff%20Channel&embeds[]=https://non-crypto-stuff-ten.vercel.app/
+      ">🔥 Share</Button.Link>,
     ],
   });
 });
 
-app.frame("/guide", (c) => {
+
+app.frame("/security", (c) => {
+  return c.res({
+    image: (
+      <Box
+        grow
+        flexDirection="column"
+        borderStyle="solid"
+        justifyContent="flex-start"
+        borderRadius="0"
+        alignHorizontal="center"
+        backgroundColor="bgDark"
+      >
+
+<Row
+          flexDirection="row"
+          height="1/7"
+          alignVertical="center"
+          alignHorizontal="center"
+          gap="10"
+          paddingLeft="12"
+          paddingRight="12"
+        >
+          <Image src="/seca.png" width="48" height="48" />
+
+          <Heading color="white" weight="900" font="VT323" size="48">
+            FARCASTER SECURITY GUIDE
+          </Heading>
+        </Row>
+        <Divider color="white" />
+
+        <Row
+          flexDirection="row"
+          height="6/7"
+          alignVertical="center"
+          alignHorizontal="center"
+          gap="10"
+          paddingLeft="12"
+          paddingRight="12"
+        >
+       
+          <Icon name="lock" color="white" size="48" />
+          <Heading color="white" weight="900" font="VT323" size="48">
+            SECURITY GUIDE SOON
+          </Heading>
+        </Row>
+         
+      </Box>
+    ),
+
+    intents: [
+      <Button action="/">📙 Main Menu</Button>,
+ 
+    ],
+  });
+});
+
+
+app.frame("/discover", (c) => {
+  return c.res({
+    image: (
+      <Box
+        grow
+        flexDirection="column"
+        borderStyle="solid"
+        justifyContent="flex-start"
+        borderRadius="0"
+        alignHorizontal="center"
+        backgroundColor="bgDark"
+      >
+
+<Row
+          flexDirection="row"
+          height="1/7"
+          alignVertical="center"
+          alignHorizontal="center"
+          gap="10"
+          paddingLeft="12"
+          paddingRight="12"
+        >
+          <Image src="/seca.png" width="48" height="48" />
+
+          <Heading color="white" weight="900" font="VT323" size="48">
+           DISCOVER CHANNELS AND PEOPLE
+          </Heading>
+        </Row>
+        <Divider color="white" />
+
+        <Row
+          flexDirection="row"
+          height="6/7"
+          alignVertical="center"
+          alignHorizontal="center"
+          gap="10"
+          paddingLeft="12"
+          paddingRight="12"
+        >
+       
+       
+          <Heading color="white" weight="900" font="VT323" size="48">
+          DISCOVER PEOPLE & CHANNELS BY LLM , SOON
+          </Heading>
+        </Row>
+         
+      </Box>
+    ),
+
+    intents: [
+      <Button action="/">📙 Main Menu</Button>,
+ 
+    ],
+  });
+});
+
+
+app.frame("/guide", async (c) => {
+  const { frameData } = c;
+  const { buttonIndex, fid, castId } = frameData;
+  if (fid) {
+    const fidArray = [fid]; // Convert fid to an array
+    const userData = await client.fetchBulkUsers(fidArray);
+    const user = userData.users[0];
+    try {
+      const updatedUser = await upsertUserWithRelations(user);
+    } catch (error) {
+      console.error(`Operation failed with error: ${error}.`);
+    }
+  } else {
+    console.error("fid is undefined");
+  }
+
+  console.log("fid", fid);
+
   return c.res({
     action: "/guide/details",
     image: (
@@ -240,7 +360,7 @@ app.frame("/guide", (c) => {
         >
           <Image src="/fc2.png" width="32" height="32" />
 
-          <Heading color="white" weight="800" font="VT323" size="48">
+          <Heading color="white" weight="900" font="VT323" size="48">
             FARCASTER USER GUIDE
           </Heading>
         </Row>
@@ -260,11 +380,12 @@ app.frame("/guide", (c) => {
         >
           <div tw="flex items-center border-b pb-2 border-gray-200 pt-2 ">
             <Text color="white" font="VT323" size="24">
-              You read 4 out of 12 guides.
+      
             </Text>
           </div>
           {guides.map((guide, index) => (
             <Box
+              key={index}
               flexDirection="column"
               gap="8"
               borderStyle="solid"
@@ -275,27 +396,31 @@ app.frame("/guide", (c) => {
                 <IconBox
                   src={guide.icon1.src}
                   text={guide.icon1.text}
-                  isRead={true}
+                  isRead={false}
                   isMain={false}
                 />
                 <IconBox
                   src={guide.icon2.src}
                   text={guide.icon2.text}
+                  isRead={false}
                   isMain={false}
                 />
                 <IconBox
                   src={guide.icon3.src}
                   text={guide.icon3.text}
+                  isRead={false}
                   isMain={false}
                 />
                 <IconBox
                   src={guide.icon4.src}
                   text={guide.icon4.text}
+                  isRead={false}
                   isMain={false}
                 />
                 <IconBox
                   src={guide.icon5.src}
                   text={guide.icon5.text}
+                  isRead={false}
                   isMain={false}
                 />
               </Box>
@@ -343,10 +468,25 @@ app.frame("/guide", (c) => {
   });
 });
 
-app.frame("/guide/details", (c) => {
- 
+app.frame("/guide/details", async (c) => {
   const { inputText } = c;
-  const section = Sections.find((sec) => sec.value.toLowerCase() === inputText.toLowerCase());
+  const section = Sections.find(
+    (sec) => sec.value.toLowerCase() === inputText.toLowerCase()
+  );
+  const fid = c.frameData.fid;
+  const sectionValue = section?.value;
+
+  const userSectionReadExists = await prisma.userSectionRead.findUnique({
+    where: { fid_sectionValue: { fid: fid, sectionValue: sectionValue } },
+  });
+
+  if (!userSectionReadExists) {
+    try {
+      await markSectionAsRead(fid, sectionValue);
+    } catch (error) {
+      console.error(`Failed to mark section as read: ${error}`);
+    }
+  }
 
   return c.res({
     image: (

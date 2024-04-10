@@ -1,0 +1,60 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider  = "postgresql"
+    // Uses connection pooling
+    url       = env("POSTGRES_PRISMA_URL")
+    // Uses direct connection, ⚠️ make sure to keep this to `POSTGRES_URL_NON_POOLING`
+    // or you'll have dangling databases from migrations
+    directUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+model User {
+    fid               Int               @id @unique
+    name              String
+    avatar            String
+    username          String            @unique
+    displayname       String
+    followers         Int
+    following         Int
+    createdAt         DateTime          @default(now())
+    verifiedAddresses VerifiedAddress?
+    sectionsRead      UserSectionRead[]
+}
+
+
+model VerifiedAddress {
+    userId       Int      @id
+    ethAddresses String[]
+    solAddresses String[]
+    user         User     @relation(fields: [userId], references: [fid])
+}
+
+model Section {
+    value            String            @id
+    text             String
+    icon             String
+    content          Content[]
+    userSectionReads UserSectionRead[]
+}
+
+model UserSectionRead {
+    fid       Int
+    sectionValue String
+    readAt    DateTime @default(now())
+    user      User     @relation(fields: [fid], references: [fid])
+    section   Section  @relation(fields: [sectionValue], references: [value])
+
+    @@id([fid, sectionValue])
+}
+
+model Content {
+    id         Int      @id @default(autoincrement())
+    title      String
+    paragraphs String[]
+    image      String
+    sectionValue  String
+    section    Section  @relation(fields: [sectionValue], references: [value])
+}
