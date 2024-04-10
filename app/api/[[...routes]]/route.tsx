@@ -43,7 +43,9 @@ const app = new Frog({
   ui: { vars },
   imageAspectRatio: "1:1",
   imageOptions: { width: 1000, height: 1000 },
-
+  headers: {
+    'cache-control': 'max-age=0',
+  }
   // hub: neynar({ apiKey: 'NEYNAR_FROG_FM' })
 });
 
