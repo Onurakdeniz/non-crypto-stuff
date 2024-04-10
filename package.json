@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "frog-dev": "frog dev",
-    "vercel-build": "prisma generate && prisma migrate deploy && next build",
+ 
     "deploy": "vercel",
     "start": "next start",
     "lint": "next lint"
