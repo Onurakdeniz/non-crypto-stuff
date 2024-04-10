@@ -202,8 +202,8 @@ app.frame("/", (c) => {
       <Button action="/guide">📙 Guide</Button>,
       <Button action="/security">🔒 Security</Button>,
       <Button action="/discover">🔍 Discover</Button>,
-      <Button.Link href="https://warpcast.com/~/compose?text=Non%20Crypto%20Stuff%20Channel&embeds[]=https://non-crypto-stuff-ten.vercel.app/
-      ">🔥 Share</Button.Link>,
+      <Button.Link href="https://warpcast.com/~/compose?text=Non%20Crypto%20Stuff%20Channel&embeds[]=https%3A%2F%2Fnon-crypto-stuff-frame.vercel.app%2F">🔥 Share</Button.Link>,
+    
     ],
   });
 });
